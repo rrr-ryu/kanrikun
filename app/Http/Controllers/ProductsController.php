@@ -14,10 +14,25 @@ class ProductsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        // 全件取得
-        $products = Product::all();
+        $request->validate([
+            'search' => ['string', 'max:255', 'nullable'],
+            'company_id' => ['integer', 'nullable']
+        ]);
+
+        $search = $request->search;
+        $company = $request->company_id;
+        // 表示商品の取得
+        if($search && $company){
+            $products = Product::where('product_name', 'like', "%$search%")->where('company_id', $company)->get();
+        }else if($search){
+            $products = Product::where('product_name', 'like', "%$search%")->get();
+        }else if($company){
+            $products = Product::where('company_id', $company)->get();
+        }else{
+            $products = Product::all();
+        }
         // Companyセレクト用
         $companies = Company::all();
 
@@ -61,8 +76,7 @@ class ProductsController extends Controller
             $fileNameToStore = $fileName. '.' . $extension;
             Storage::putFileAs('public/product/', $file, $fileNameToStore);
         }else{
-            // 選択されていなければサンプルを表示する
-            $fileNameToStore = 'sample5.jpg';
+            $fileNameToStore = '';
         }
 
         // 商品保存処理 

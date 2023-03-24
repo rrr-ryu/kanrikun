@@ -45,14 +45,6 @@ class ProductSeeder extends Seeder
                 'comment' => "test4 comment",
                 'img_path' => "sample4.jpg",
             ],
-            [
-                'company_id' => 1,
-                'product_name' => "test5",
-                'price' => 1005,
-                'stock' => 5,
-                'comment' => "test5 comment",
-                'img_path' => "sample5.jpg",
-            ],
         ]);
     }
 }

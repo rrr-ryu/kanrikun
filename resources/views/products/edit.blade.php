@@ -26,7 +26,7 @@
                         <td>
                             <select name="company_id" id="company_id">
                                 @foreach ($companies as $company)
-                                <option value="{{ $company->id }}">{{ $company->company_name }}</option>
+                                <option value="{{ $company->id }}" @if ($company->id === $product->company_id)selected @endif>{{ $company->company_name }}</option>
                                 @endforeach
                             </select>
                         </td>

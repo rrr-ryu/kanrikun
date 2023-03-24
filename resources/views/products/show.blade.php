@@ -5,7 +5,13 @@
     商品情報詳細画面
     <div class="col justify-content-center">
         <div class="text-center mb-2">ID：{{ $product->id }}</div>
-        <div class="w-25 m-auto mb-2"><img src="{{asset('storage/product/' . $product->img_path)}}" class="img-thumbnail" alt="..."></div>
+        <div class="w-25 m-auto mb-2 text-center">
+            @if ($product->img_path)
+            <img src="{{ asset('storage/product/' . $product->img_path) }}" class="img-thumbnail" alt="..."></td>
+        @else
+            <p>画像なし</p>
+        @endif
+        </div>
         <div class="text-center mb-2">商品名：{{ $product->product_name }}</div>
         <div class="text-center mb-2">メーカー名：{{ $product->company->company_name }}</div>
         <div class="text-center mb-2">価格：{{ $product->price }}</div>

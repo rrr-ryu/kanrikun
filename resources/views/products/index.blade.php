@@ -7,15 +7,15 @@
     <div class="row">
         <div class="text-center flex-row"><button type="button" onclick="location.href='{{ route('products.create') }}'" class="btn btn-primary m-2">新規商品登録</button></div>
     </div>
-    <form action="">
-        <input type="text">
+    <form action="{{ route('products.index') }} " method="get">
+        <input type="text" name="search">
         <select name="company_id" id="company_id">
             <option value="">メーカー名</option>
             @foreach ($companies as $company)
             <option value="{{ $company->id }}">{{ $company->company_name }}</option>
             @endforeach
         </select>
-        <input type="button" value="検索">
+        <input type="submit" value="検索">
     </form>
     <div class="col-md-12">
         <table class="table">
@@ -32,10 +32,18 @@
                 </tr>
             </thead>
             <tbody>
+                @if ($products->count() === 0)
+                    <p>検索結果が見つかりませんでした</p>
+                @else
                 @foreach ( $products as $product )
                 <tr>
                     <td>{{ $product->id }}</td>
-                    <td><img src="{{ asset('storage/product/' . $product->img_path) }}" class="img-thumbnail" alt="..."></td>
+                    <td>
+                        @if ($product->img_path)
+                            <img src="{{ asset('storage/product/' . $product->img_path) }}" class="img-thumbnail" alt="..."></td>
+                        @else
+                            <p>画像なし</p>
+                        @endif
                     <td>{{ $product->product_name }}</td>
                     <td>{{ $product->price }}</td>
                     <td>{{ $product->stock }}</td>
@@ -50,6 +58,7 @@
                     </td>
                   </tr>
                   @endforeach
+                @endif
               </tbody>
           </table>
     </div>

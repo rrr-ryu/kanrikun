@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Product;
+use Illuminate\Support\Facades\Storage;
 
 class ProductsController extends Controller
 {
@@ -25,7 +26,7 @@ class ProductsController extends Controller
      */
     public function create()
     {
-        //
+        return view('products.create');
     }
 
     /**
@@ -36,7 +37,34 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'product_name' => ['required', 'string', 'max:255'],
+            'company_id' => ['required', 'integer'],
+            'price' => ['required', 'integer'],
+            'stock' => ['required', 'integer'],
+            'comment' => ['string', 'max:1024', 'nullable'],
+            'image' => ['file', 'mimes:jpeg,png,jpg,bmb'],
+        ]);
+        // 画像保存処理
+            if($file = $request->image){
+                $fileName = uniqid(rand().'_');
+                $extension = $file->extension(); 
+                $fileNameToStore = $fileName. '.' . $extension;
+                Storage::putFileAs('public/product/', $file, $fileNameToStore);
+            }else{
+                $fileNameToStore = 'sample5.jpg';
+            }
+
+        $product = Product::create([
+            'product_name' => $request->product_name,
+            'company_id' => $request->company_id,
+            'price' => $request->price,
+            'stock' => $request->stock,
+            'comment' => $request->comment,
+            'img_path' => $fileNameToStore
+        ]);
+
+        return redirect()->route('products.create');
     }
 
     /**

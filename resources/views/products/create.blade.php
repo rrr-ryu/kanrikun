@@ -10,7 +10,7 @@
                 <div>
                     <tr>
                         <th><label for="product_name">商品名</label></th>
-                        <td><input type="text" name="product_name" id="product_name" value=""></td>
+                        <td><input type="text" name="product_name" id="product_name" value="{{ old('product_name') }}"></td>
                     </tr>
                 </div>
                 <div>
@@ -18,7 +18,9 @@
                         <th><label for="company_id">メーカー</label></th>
                         <td>
                             <select name="company_id" id="company_id">
-                                <option value="1">アサヒ</option>
+                                @foreach ($companies as $company)
+                                <option value="{{ $company->id }}">{{ $company->company_name }}</option>
+                                @endforeach
                             </select>
                         </td>
                     </tr>
@@ -26,19 +28,19 @@
                 <div>
                     <tr>
                         <th><label for="price">価格</label></th>
-                        <td><input type="text" name="price" id="price" value=""></td>
+                        <td><input type="text" name="price" id="price" value="{{ old('price') }}"></td>
                     </tr>
                 </div>
                 <div>
                     <tr>
                         <th><label for="stock">在庫数</label></th>
-                        <td><input type="text" name="stock" id="stock"></td>
+                        <td><input type="text" name="stock" id="stock" value="{{ old('stock') }}"></td>
                     </tr>
                 </div>
                 <div>
                     <tr>
                         <th><label for="comment">コメント</label></th>
-                        <td><textarea name="comment" id="comment" placeholder="コメントがあれば入力して下さい"></textarea></td>
+                        <td><textarea name="comment" id="comment" placeholder="コメントがあれば入力して下さい">{{ old('comment') }}</textarea></td>
                     </tr>
                 </div>
                 <div>

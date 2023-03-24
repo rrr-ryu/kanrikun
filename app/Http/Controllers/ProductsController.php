@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Product;
+use App\Company;
 use Illuminate\Support\Facades\Storage;
 
 class ProductsController extends Controller
@@ -16,7 +17,8 @@ class ProductsController extends Controller
     public function index()
     {
         $products = Product::all();
-        return view('products.index', compact('products'));
+        $companies = Company::all();
+        return view('products.index', compact('products', 'companies'));
     }
 
     /**
@@ -26,7 +28,8 @@ class ProductsController extends Controller
      */
     public function create()
     {
-        return view('products.create');
+        $companies = Company::all();
+        return view('products.create', compact('companies'));
     }
 
     /**
@@ -55,7 +58,7 @@ class ProductsController extends Controller
                 $fileNameToStore = 'sample5.jpg';
             }
 
-        $product = Product::create([
+        Product::create([
             'product_name' => $request->product_name,
             'company_id' => $request->company_id,
             'price' => $request->price,
@@ -75,7 +78,8 @@ class ProductsController extends Controller
      */
     public function show($id)
     {
-        //
+        $product = Product::findOrFail($id);
+        return view('products.show', compact('product'));
     }
 
     /**
@@ -86,7 +90,7 @@ class ProductsController extends Controller
      */
     public function edit($id)
     {
-        //
+        dd($id);
     }
 
     /**

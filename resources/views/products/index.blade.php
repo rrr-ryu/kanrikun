@@ -5,12 +5,15 @@
 <div class="container">
   商品情報一覧画面
     <div class="row">
-        <div class="col-2 text-center"><a href="{{ route('products.create')}}">新規商品登録</a></div>
+        <div class="text-center flex-row"><button type="button" onclick="location.href='{{ route('products.create') }}'" class="btn btn-primary m-2">新規商品登録</button></div>
     </div>
     <form action="">
         <input type="text">
-        <select name="" id="">
-          <option value="">test</option>
+        <select name="company_id" id="company_id">
+            <option value="">メーカー名</option>
+            @foreach ($companies as $company)
+            <option value="{{ $company->id }}">{{ $company->company_name }}</option>
+            @endforeach
         </select>
         <input type="button" value="検索">
     </form>
@@ -37,7 +40,7 @@
                       <td>{{ $product->price }}</td>
                       <td>{{ $product->stock }}</td>
                       <td>{{ $product->company->company_name }}</td>
-                      <td><button onclick="">詳細</button></td>
+                      <td><button onclick="location.href='{{route('products.show',['product' => $product->id])}}'">詳細</button></td>
                       <td><button onclick="location.href='{{}}'">削除</button></td>
                   </tr>
                   @endforeach

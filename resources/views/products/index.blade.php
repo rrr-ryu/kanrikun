@@ -29,19 +29,25 @@
                     <th class="col-2">メーカー名</th>
                     <th class="col-1"></th>
                     <th class="col-1"></th>
-                 </tr>
-              </thead>
-              <tbody>
-                  @foreach ( $products as $product )
-                  <tr>
-                      <td>{{ $product->id }}</td>
-                      <td><img src="{{asset('storage/product/' . $product->img_path)}}" class="img-thumbnail" alt="..."></td>
-                      <td>{{ $product->product_name }}</td>
-                      <td>{{ $product->price }}</td>
-                      <td>{{ $product->stock }}</td>
-                      <td>{{ $product->company->company_name }}</td>
-                      <td><button onclick="location.href='{{route('products.show',['product' => $product->id])}}'">詳細</button></td>
-                      <td><button onclick="location.href='{{}}'">削除</button></td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ( $products as $product )
+                <tr>
+                    <td>{{ $product->id }}</td>
+                    <td><img src="{{ asset('storage/product/' . $product->img_path) }}" class="img-thumbnail" alt="..."></td>
+                    <td>{{ $product->product_name }}</td>
+                    <td>{{ $product->price }}</td>
+                    <td>{{ $product->stock }}</td>
+                    <td>{{ $product->company->company_name }}</td>
+                    <td><button class="btn btn-success" onclick="location.href='{{ route('products.show',['product' => $product->id]) }}'">詳細</button></td>
+                    <td>
+                        <form id="delete_{{$product->id}}" method="post" action="{{ route('products.destroy', ['product' => $product->id])}}">
+                            @csrf
+                            @method('delete')
+                            <a class="btn btn-danger" href="#" data-id="{{ $product->id }}" onclick="deletePost(this)">削除</a>
+                        </form>
+                    </td>
                   </tr>
                   @endforeach
               </tbody>

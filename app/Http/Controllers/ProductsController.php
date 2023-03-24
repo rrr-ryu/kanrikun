@@ -75,7 +75,8 @@ class ProductsController extends Controller
             'img_path' => $fileNameToStore
         ]);
 
-        return redirect()->route('products.create');
+        return redirect()
+        ->route('products.create');
     }
 
     /**
@@ -140,7 +141,8 @@ class ProductsController extends Controller
         $product->comment = $request->comment;
         $product->save();
 
-        return redirect()->route('products.edit',['product' => $product->id]);
+        return redirect()
+        ->route('products.edit',['product' => $product->id]);
     }
 
     /**
@@ -151,6 +153,9 @@ class ProductsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Product::findOrFail($id)->delete();
+
+        return redirect()
+        ->route('products.index');
     }
 }

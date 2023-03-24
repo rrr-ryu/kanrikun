@@ -36,7 +36,7 @@
                       <td>{{ $product->product_name }}</td>
                       <td>{{ $product->price }}</td>
                       <td>{{ $product->stock }}</td>
-                      <td>メーカー名</td>
+                      <td>{{ $product->company->company_name }}</td>
                       <td><button onclick="">詳細</button></td>
                       <td><button onclick="location.href='{{}}'">削除</button></td>
                   </tr>

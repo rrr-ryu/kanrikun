@@ -49,8 +49,8 @@
                 </div>
             </table>
             <div>
+                <button type="button" onclick="location.href='{{ route('products.index')}}'">戻る</button>
                 <input type="submit">
-                <button type="button">戻る</button>
             </div>
         </form>
     </div>

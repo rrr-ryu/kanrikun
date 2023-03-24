@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Company;
+use App\Sale;
 
 class Product extends Model
 {
@@ -14,4 +16,15 @@ class Product extends Model
         'comment',
         'img_path',
     ];
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    public function sales()
+    {
+        return $this->hasMany(Sale::class);
+    }
+
 }

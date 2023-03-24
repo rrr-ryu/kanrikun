@@ -46,7 +46,7 @@ class ProductSeeder extends Seeder
                 'img_path' => "sample4.jpg",
             ],
             [
-                'company_id' => 5,
+                'company_id' => 1,
                 'product_name' => "test5",
                 'price' => 1005,
                 'stock' => 5,

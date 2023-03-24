@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-  商品情報一覧画面
+    商品情報一覧画面
     <div class="row">
         <div class="text-center flex-row"><button type="button" onclick="location.href='{{ route('products.create') }}'" class="btn btn-primary m-2">新規商品登録</button></div>
     </div>

@@ -52,7 +52,13 @@
                 </div>
                 <div>
                     <tr>
-                        <th><label for="image">画像</label></th>
+                        <th><label for="image">現在の画像</label></th>
+                        <td><img src="{{ asset('storage/product/' . $product->img_path) }}" class="img-thumbnail w-50" alt="..."></td>
+                    </tr>  
+                </div>
+                <div>
+                    <tr>
+                        <th><label for="image">変更する画像を選択して下さい</label></th>
                         <td><input type="file" name="image" id="image"></td>
                     </tr>  
                 </div>

@@ -1,14 +1,14 @@
 <?php
 
-namespace App;
+// namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use App\Product;
+// use Illuminate\Database\Eloquent\Model;
+// use App\Product;
 
-class Sale extends Model
-{
-    public function product()
-    {
-        return $this->belongsTo(Product::class);
-    }
-}
+// class Sale extends Model
+// {
+//     public function product()
+//     {
+//         return $this->belongsTo(Product::class);
+//     }
+// }

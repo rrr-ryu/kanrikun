@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Product;
-use App\Company;
+use App\Models\Product;
+use App\Models\Company;
 use Illuminate\Support\Facades\Storage;
 
 class ProductsController extends Controller
@@ -23,16 +23,20 @@ class ProductsController extends Controller
 
         $search = $request->search;
         $company = $request->company_id;
+        
         // 表示商品の取得
-        if($search && $company){
-            $products = Product::where('product_name', 'like', "%$search%")->where('company_id', $company)->get();
-        }else if($search){
-            $products = Product::where('product_name', 'like', "%$search%")->get();
-        }else if($company){
-            $products = Product::where('company_id', $company)->get();
-        }else{
-            $products = Product::all();
-        }
+        $product = new Product();
+        $products = $product->searchProducts($search, $company);
+
+        // if($search && $company){
+        //     $products = Product::where('product_name', 'like', "%$search%")->where('company_id', $company)->get();
+        // }else if($search){
+        //     $products = Product::where('product_name', 'like', "%$search%")->get();
+        // }else if($company){
+        //     $products = Product::where('company_id', $company)->get();
+        // }else{
+        //     $products = Product::all();
+        // }
         // Companyセレクト用
         $companies = Company::all();
 
@@ -69,25 +73,27 @@ class ProductsController extends Controller
             'image' => ['file', 'mimes:jpeg,png,jpg,bmb'],
         ]);
 
-        // 画像保存処理
-        if($file = $request->image){
-            $fileName = uniqid(rand().'_');
-            $extension = $file->extension(); 
-            $fileNameToStore = $fileName. '.' . $extension;
-            Storage::putFileAs('public/product/', $file, $fileNameToStore);
-        }else{
-            $fileNameToStore = '';
-        }
+        $product = new Product();
+        $product->createProduct($request);
+        // // 画像保存処理
+        // if($file = $request->image){
+        //     $fileName = uniqid(rand().'_');
+        //     $extension = $file->extension(); 
+        //     $fileNameToStore = $fileName. '.' . $extension;
+        //     Storage::putFileAs('public/product/', $file, $fileNameToStore);
+        // }else{
+        //     $fileNameToStore = '';
+        // }
 
-        // 商品保存処理 
-        Product::create([
-            'product_name' => $request->product_name,
-            'company_id' => $request->company_id,
-            'price' => $request->price,
-            'stock' => $request->stock,
-            'comment' => $request->comment,
-            'img_path' => $fileNameToStore
-        ]);
+        // // 商品保存処理 
+        // Product::create([
+        //     'product_name' => $request->product_name,
+        //     'company_id' => $request->company_id,
+        //     'price' => $request->price,
+        //     'stock' => $request->stock,
+        //     'comment' => $request->comment,
+        //     'img_path' => $fileNameToStore
+        // ]);
 
         return redirect()
         ->route('products.create');
@@ -137,23 +143,23 @@ class ProductsController extends Controller
             'image' => ['file', 'mimes:jpeg,png,jpg,bmb'],
         ]);
 
-        $product = Product::findOrFail($id);
-
-        // 画像保存処理
-        if($file = $request->image){
-            $fileName = uniqid(rand().'_');
-            $extension = $file->extension(); 
-            $fileNameToStore = $fileName. '.' . $extension;
-            Storage::putFileAs('public/product/', $file, $fileNameToStore);
-            $product->img_path = $fileNameToStore;
-        }
+        $product = (new Product())->updateProduct($id, $request);
+        // $product = Product::findOrFail($id);
+        // // 画像保存処理
+        // if($file = $request->image){
+        //     $fileName = uniqid(rand().'_');
+        //     $extension = $file->extension(); 
+        //     $fileNameToStore = $fileName. '.' . $extension;
+        //     Storage::putFileAs('public/product/', $file, $fileNameToStore);
+        //     $product->img_path = $fileNameToStore;
+        // }
         
-        $product->product_name = $request->product_name;
-        $product->company_id = $request->company_id;
-        $product->price = $request->price;
-        $product->stock = $request->stock;
-        $product->comment = $request->comment;
-        $product->save();
+        // $product->product_name = $request->product_name;
+        // $product->company_id = $request->company_id;
+        // $product->price = $request->price;
+        // $product->stock = $request->stock;
+        // $product->comment = $request->comment;
+        // $product->save();
 
         return redirect()
         ->route('products.edit',['product' => $product->id]);

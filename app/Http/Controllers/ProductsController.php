@@ -3,17 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Product;
-use App\Company;
+use App\Models\Product;
+use App\Models\Company;
 use Illuminate\Support\Facades\Storage;
 
 class ProductsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         $request->validate([
@@ -23,27 +18,16 @@ class ProductsController extends Controller
 
         $search = $request->search;
         $company = $request->company_id;
+        
         // 表示商品の取得
-        if($search && $company){
-            $products = Product::where('product_name', 'like', "%$search%")->where('company_id', $company)->get();
-        }else if($search){
-            $products = Product::where('product_name', 'like', "%$search%")->get();
-        }else if($company){
-            $products = Product::where('company_id', $company)->get();
-        }else{
-            $products = Product::all();
-        }
-        // Companyセレクト用
+        $product = new Product();
+        $products = $product->searchProducts($search, $company);
+
         $companies = Company::all();
 
         return view('products.index', compact('products', 'companies'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         // Companyセレクト用
@@ -51,12 +35,6 @@ class ProductsController extends Controller
         return view('products.create', compact('companies'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         // バリデーション設定
@@ -69,48 +47,19 @@ class ProductsController extends Controller
             'image' => ['file', 'mimes:jpeg,png,jpg,bmb'],
         ]);
 
-        // 画像保存処理
-        if($file = $request->image){
-            $fileName = uniqid(rand().'_');
-            $extension = $file->extension(); 
-            $fileNameToStore = $fileName. '.' . $extension;
-            Storage::putFileAs('public/product/', $file, $fileNameToStore);
-        }else{
-            $fileNameToStore = '';
-        }
-
-        // 商品保存処理 
-        Product::create([
-            'product_name' => $request->product_name,
-            'company_id' => $request->company_id,
-            'price' => $request->price,
-            'stock' => $request->stock,
-            'comment' => $request->comment,
-            'img_path' => $fileNameToStore
-        ]);
+        $product = new Product();
+        $product->createProduct($request);
 
         return redirect()
         ->route('products.create');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         $product = Product::findOrFail($id);
         return view('products.show', compact('product'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $product = Product::findOrFail($id);
@@ -118,13 +67,6 @@ class ProductsController extends Controller
         return view('products.edit', compact('product', 'companies'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
 
@@ -137,34 +79,12 @@ class ProductsController extends Controller
             'image' => ['file', 'mimes:jpeg,png,jpg,bmb'],
         ]);
 
-        $product = Product::findOrFail($id);
-
-        // 画像保存処理
-        if($file = $request->image){
-            $fileName = uniqid(rand().'_');
-            $extension = $file->extension(); 
-            $fileNameToStore = $fileName. '.' . $extension;
-            Storage::putFileAs('public/product/', $file, $fileNameToStore);
-            $product->img_path = $fileNameToStore;
-        }
-        
-        $product->product_name = $request->product_name;
-        $product->company_id = $request->company_id;
-        $product->price = $request->price;
-        $product->stock = $request->stock;
-        $product->comment = $request->comment;
-        $product->save();
+        $product = (new Product())->updateProduct($id, $request);
 
         return redirect()
         ->route('products.edit',['product' => $product->id]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         Product::findOrFail($id)->delete();

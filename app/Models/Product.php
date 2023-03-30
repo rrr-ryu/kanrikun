@@ -32,6 +32,7 @@ class Product extends Model
         return $this->all();
     }
 
+    // プロダクト作成
     public function createProduct($request)
     {
         // 画像保存処理
@@ -53,9 +54,9 @@ class Product extends Model
             'comment' => $request->comment,
             'img_path' => $fileNameToStore
         ]);
-
     }
 
+    // プロダクト更新
     public function updateProduct($id, $request)
     {
         $product = $this::findOrFail($id);

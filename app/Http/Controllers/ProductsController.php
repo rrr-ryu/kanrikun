@@ -20,8 +20,7 @@ class ProductsController extends Controller
         $company = $request->company_id;
         
         // 表示商品の取得
-        $product = new Product();
-        $products = $product->searchProducts($search, $company);
+        $products = (new Product())->searchProducts($search, $company);
 
         $companies = Company::all();
 
@@ -47,8 +46,7 @@ class ProductsController extends Controller
             'image' => ['file', 'mimes:jpeg,png,jpg,bmb'],
         ]);
 
-        $product = new Product();
-        $product->createProduct($request);
+        $product = (new Product())->createProduct($request);
 
         return redirect()
         ->route('products.create');

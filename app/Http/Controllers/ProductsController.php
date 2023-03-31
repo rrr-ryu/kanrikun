@@ -11,7 +11,7 @@ class ProductsController extends Controller
 {
     public function index(Request $request)
     {
-        $products = Product::all();
+        $products = (new Product())->allProducts();
         $companies = (new Company())->allCompanies();
 
         return view('products.index', compact('products', 'companies'));

@@ -18,6 +18,18 @@ class Product extends Model
         'img_path',
     ];
 
+    public function allProducts()
+    {
+        $products = $this->all();
+        return $products;
+    }
+
+    public function findProduct($id)
+    {
+        $product = $this->findOrFail($id);
+        return $product;
+    }
+
     // 表示商品の取得
     public function searchProducts($search = null, $company = null)
     {

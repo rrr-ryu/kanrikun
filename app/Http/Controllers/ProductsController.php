@@ -22,7 +22,7 @@ class ProductsController extends Controller
         // 表示商品の取得
         $products = (new Product())->searchProducts($search, $company);
 
-        $companies = Company::all();
+        $companies = (new Company())->allCompanies();
 
         return view('products.index', compact('products', 'companies'));
     }
@@ -30,7 +30,7 @@ class ProductsController extends Controller
     public function create()
     {
         // Companyセレクト用
-        $companies = Company::all();
+        $companies = (new Company())->allCompanies();
         return view('products.create', compact('companies'));
     }
 
@@ -54,14 +54,14 @@ class ProductsController extends Controller
 
     public function show($id)
     {
-        $product = Product::findOrFail($id);
+        $product = (new Product())->findProduct($id);
         return view('products.show', compact('product'));
     }
 
     public function edit($id)
     {
-        $product = Product::findOrFail($id);
-        $companies = Company::all();
+        $product = (new Product())->findProduct($id);
+        $companies = (new Company())->allCompanies();
         return view('products.edit', compact('product', 'companies'));
     }
 
@@ -85,7 +85,8 @@ class ProductsController extends Controller
 
     public function destroy($id)
     {
-        Product::findOrFail($id)->delete();
+        $product = (new Product())->findProduct($id)
+        ->delete();
 
         return redirect()
         ->route('products.index');

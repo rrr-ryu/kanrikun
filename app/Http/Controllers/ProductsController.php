@@ -11,12 +11,12 @@ class ProductsController extends Controller
 {
     public function index(Request $request)
     {
-        $products = (new Product())->searchProducts();
+        $products = (new Product())->allProducts();
         $companies = (new Company())->allCompanies();
 
+        // セッションに配列を保存するコード
         session_start();
         $_SESSION['products'] = $products;
-
 
         return view('products.index', compact('products', 'companies'));
     }
@@ -88,6 +88,9 @@ class ProductsController extends Controller
 
     public function search()
     {
+        session_start();
+        $products = $_SESSION['products'];
+
         $search = $_POST["search"];
         $companyId = $_POST["company_id"];
         $minPrice = $_POST["searchPrice_min"];
@@ -100,7 +103,6 @@ class ProductsController extends Controller
         ->searchProducts($minPrice, $maxPrice, $minStock, $maxStock, $search, $companyId);
 
         // セッションに配列を保存するコード
-        session_start();
         $_SESSION['products'] = $products;
 
         return $products;
@@ -113,7 +115,7 @@ class ProductsController extends Controller
         $products = $_SESSION['products'];
 
         $sort_id = $_POST['sort'];
-
+        // sort_idによって検索するキーを変える
         switch ($sort_id) {
             case 1:
                 $sort_key = 'id';
@@ -131,6 +133,7 @@ class ProductsController extends Controller
                 $sort_key = 'company_id';
                 break;
         }
+        // 検索して配列を新しく作成して代入する
         $sortProducts = $products->sortBy($sort_key)->values()->all();
         return $sortProducts;
     }

@@ -39,9 +39,11 @@ $(document).ready(function() {
                         tbody.append(tr);
                     });
                 }
+                // 検索した時にソートをIDに戻す
                 sortFirst.prop("selected", true);
             }
         });
+        // 検索後入力した内容を消す
         searchForm.find(':text').val("");
     });
 });

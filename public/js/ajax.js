@@ -42,5 +42,6 @@ $(document).ready(function() {
                 sortFirst.prop("selected", true);
             }
         });
+        searchForm.find(':text').val("");
     });
 });

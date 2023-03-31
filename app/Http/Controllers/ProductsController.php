@@ -11,8 +11,12 @@ class ProductsController extends Controller
 {
     public function index(Request $request)
     {
-        $products = (new Product())->allProducts();
+        $products = (new Product())->searchProducts();
         $companies = (new Company())->allCompanies();
+
+        session_start();
+        $_SESSION['products'] = $products;
+
 
         return view('products.index', compact('products', 'companies'));
     }
@@ -85,10 +89,54 @@ class ProductsController extends Controller
     public function search()
     {
         $search = $_POST["search"];
-        $company = $_POST["company_id"];
+        $companyId = $_POST["company_id"];
+        $minPrice = $_POST["searchPrice_min"];
+        $maxPrice = $_POST["searchPrice_max"];
+        $minStock = $_POST["searchStock_min"];
+        $maxStock = $_POST["searchStock_max"];
         
         // 表示商品の取得
-        $products = (new Product())->searchProducts($search, $company);
+        $products = (new Product())
+        ->searchProducts($minPrice, $maxPrice, $minStock, $maxStock, $search, $companyId);
+
+        // セッションに配列を保存するコード
+        session_start();
+        $_SESSION['products'] = $products;
+
         return $products;
+    }
+
+    public function sort()
+    {
+        // セッションから配列を取得するコード
+        session_start();
+        $products = $_SESSION['products'];
+
+        $sort_name = $_POST['sort'];
+
+        switch ($sort_name) {
+            case 1:
+                $sort_key = 'id';
+                break;
+            case 2:
+                $sort_key = 'product_name';
+                break;
+            case 3:
+                $sort_key = 'price';
+                break;
+            case 4:
+                $sort_key = 'stock';
+                break;
+            case 5:
+                $sort_key = 'company_id';
+                break;
+            default:
+                $sort_key = 'id';
+                break;
+        }
+
+        $sortProducts = $products->sortByDesc($sort_key);
+        return $sortProducts;
+        
     }
 }

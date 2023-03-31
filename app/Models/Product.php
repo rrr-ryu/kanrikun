@@ -30,17 +30,37 @@ class Product extends Model
         return $product;
     }
 
-    // 表示商品の取得
-    public function searchProducts($search = null, $company = null)
+    // 表示商品の取得メソッド
+    public function searchProducts($minPrice = null, $maxPrice = null, $minStock = null, $maxStock = null, $search = null, $companyId = null,)
     {
-        if($search && $company){
-            $products = $this->where('product_name', 'like', "%$search%")->where('company_id', $company)->get();
+        
+        // 商品名とメーカー名検索
+        if($search && $companyId){
+            $products = $this->where('product_name', 'like', "%$search%")->where('company_id', $companyId)->get();
         }else if($search){
             $products = $this->where('product_name', 'like', "%$search%")->get();
-        }else if($company){
-            $products = $this->where('company_id', $company)->get();
+        }else if($companyId){
+            $products = $this->where('company_id', $companyId)->get();
         }else{
             $products = $this->all();
+        }
+        
+        // 価格検索
+        if($minPrice && $maxPrice){
+            $products = $products->whereBetween('price', [$minPrice, $maxPrice]);
+        }else if($minPrice){
+            $products = $products->where('price', '>=', $minPrice);
+        }else if($maxPrice){
+            $products = $products->where('price', '<=', $maxPrice);
+        }
+
+        // 在庫数検索
+        if($minStock && $maxStock){
+            $products = $products->whereBetween('stock', [$minStock, $maxStock]);
+        }else if($minStock){
+            $products = $products->where('stock', '>=', $minStock);
+        }else if($maxStock){
+            $products = $products->where('stock', '<=', $maxStock);
         }
 
         foreach ($products as $product) {
@@ -48,7 +68,6 @@ class Product extends Model
         }
 
         return $products;
-
     }
 
     // プロダクト作成

@@ -14,6 +14,12 @@ class Company extends Model
         'representative_name'
     ];
 
+    public function allCompanies()
+    {
+        $companies = $this->all();
+        return $companies;
+    }
+
     public function products()
     {
         return $this->hasMany(Product::class);

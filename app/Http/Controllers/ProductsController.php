@@ -112,9 +112,9 @@ class ProductsController extends Controller
         session_start();
         $products = $_SESSION['products'];
 
-        $sort_name = $_POST['sort'];
+        $sort_id = $_POST['sort'];
 
-        switch ($sort_name) {
+        switch ($sort_id) {
             case 1:
                 $sort_key = 'id';
                 break;
@@ -130,13 +130,8 @@ class ProductsController extends Controller
             case 5:
                 $sort_key = 'company_id';
                 break;
-            default:
-                $sort_key = 'id';
-                break;
         }
-
-        $sortProducts = $products->sortByDesc($sort_key);
+        $sortProducts = $products->sortBy($sort_key)->values()->all();
         return $sortProducts;
-        
     }
 }

@@ -39,14 +39,17 @@
             </form>
         </div>
         <div>
-            <label for="sort">ソート</label>
-            <select name="sort" id="sort">
-                <option value="1">ID</option>
-                <option value="2">商品名</option>
-                <option value="3">価格</option>
-                <option value="4">在庫数</option>
-                <option value="5">メーカー名</option>
-            </select>
+            <form id="sortForm" action="{{ route('products.sort') }} " method="post">
+                @csrf
+                <label for="sort">ソート</label>
+                <select name="sort">
+                    <option id="sort_first" value="1">ID</option>
+                    <option value="2">商品名</option>
+                    <option value="3">価格</option>
+                    <option value="4">在庫数</option>
+                    <option value="5">メーカー名</option>
+                </select>
+            </form>
         </div>
     </div>
     <div class="col-md-12">

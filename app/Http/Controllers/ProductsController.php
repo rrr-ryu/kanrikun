@@ -11,17 +11,7 @@ class ProductsController extends Controller
 {
     public function index(Request $request)
     {
-        $request->validate([
-            'search' => ['string', 'max:255', 'nullable'],
-            'company_id' => ['integer', 'nullable']
-        ]);
-
-        $search = $request->search;
-        $company = $request->company_id;
-        
-        // 表示商品の取得
-        $products = (new Product())->searchProducts($search, $company);
-
+        $products = Product::all();
         $companies = Company::all();
 
         return view('products.index', compact('products', 'companies'));
@@ -89,5 +79,15 @@ class ProductsController extends Controller
 
         return redirect()
         ->route('products.index');
+    }
+
+    public function search()
+    {
+        $search = $_POST["search"];
+        $company = $_POST["company_id"];
+        
+        // 表示商品の取得
+        $products = (new Product())->searchProducts($search, $company);
+        return $products;
     }
 }

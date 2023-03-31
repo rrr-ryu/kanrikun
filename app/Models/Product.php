@@ -22,14 +22,21 @@ class Product extends Model
     public function searchProducts($search = null, $company = null)
     {
         if($search && $company){
-            return $this->where('product_name', 'like', "%$search%")->where('company_id', $company)->get();
+            $products = $this->where('product_name', 'like', "%$search%")->where('company_id', $company)->get();
         }else if($search){
-            return $this->where('product_name', 'like', "%$search%")->get();
+            $products = $this->where('product_name', 'like', "%$search%")->get();
         }else if($company){
-            return $this->where('company_id', $company)->get();
+            $products = $this->where('company_id', $company)->get();
+        }else{
+            $products = $this->all();
         }
-        
-        return $this->all();
+
+        foreach ($products as $product) {
+            $product['company'] = $product->company;
+        }
+
+        return $products;
+
     }
 
     // プロダクト作成

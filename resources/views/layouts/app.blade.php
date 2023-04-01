@@ -11,7 +11,7 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/jquery-3.6.4.js') }}" defer></script>
-    <script src="{{ asset('js/confirm.js') }}" defer></script>
+    <script src="{{ asset('js/delete_project.js') }}" defer></script>
     <script src="{{ asset('js/ajax.js') }}" defer></script>
     <script src="{{ asset('js/sort.js') }}" defer></script>
     <script src="{{ asset('js/app.js')}}"></script>

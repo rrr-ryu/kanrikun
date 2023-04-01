@@ -21,6 +21,7 @@ Auth::routes();
 
 Route::resource('products', ProductsController::class)
     ->middleware('auth');
-
-Route::post('products/search', 'ProductsController@search')->name('products.search');
-Route::post('products/sort', 'ProductsController@sort')->name('products.sort');
+Route::post('products/search', 'ProductsController@search')->name('products.search')
+    ->middleware('auth');
+Route::post('products/sort', 'ProductsController@sort')->name('products.sort')
+    ->middleware('auth');

@@ -77,13 +77,14 @@ class ProductsController extends Controller
         ->route('products.edit',['product' => $product->id]);
     }
 
-    public function destroy($id)
+    public function destroy(Request $request)
     {
+        $id = $request->input('_id');
         $product = (new Product())->findProduct($id)
         ->delete();
 
-        return redirect()
-        ->route('products.index');
+        // return redirect()
+        // ->route('products.index');
     }
 
     public function search()

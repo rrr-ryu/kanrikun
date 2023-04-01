@@ -4,7 +4,9 @@
 <div class="container">
     商品情報一覧画面
     <div class="row">
-        <div class="text-center flex-row"><button type="button" onclick="location.href='{{ route('products.create') }}'" class="btn btn-primary m-2">新規商品登録</button></div>
+        <div class="text-center flex-row">
+            <button type="button" onclick="location.href='{{ route('products.create') }}'" class="btn btn-primary m-2">新規商品登録</button>
+        </div>
     </div>
     <div class="row justify-content-between">
         <div>
@@ -68,7 +70,7 @@
             </thead>
             <tbody class="tableBody">
                 @foreach ( $products as $product )
-                <tr>
+                <tr id="product_{{ $product->id }}">
                     <td>{{ $product->id }}</td>
                     <td>
                         @if ($product->img_path)
@@ -85,9 +87,8 @@
                         <form id="delete_{{$product->id}}" method="post" action="{{ route('products.destroy', ['product' => $product->id])}}">
                             @csrf
                             @method('delete')
-                            <a class="btn btn-danger" href="#" data-id="{{ $product->id }}" onclick="deletePost(this)">削除</a>
-                        </form>
-                    </td>
+                            <a class="btn btn-danger delete-btn" href="#" data-id="{{ $product->id }}">削除</a>
+                        </td>
                 </tr>
                 @endforeach
             </tbody>

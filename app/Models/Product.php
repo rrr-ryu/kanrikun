@@ -30,7 +30,7 @@ class Product extends Model
         return $product;
     }
 
-    // 表示商品の取得メソッド（引数が多いので分けたかったがメソッドチェーンで実行できなかったため断念）
+    // 表示商品の取得メソッド
     public function searchProducts($minPrice = null, $maxPrice = null, $minStock = null, $maxStock = null, $search = null, $companyId = null,)
     {
         // 商品名とメーカー名検索

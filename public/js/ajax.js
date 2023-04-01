@@ -22,7 +22,7 @@ $(document).ready(function() {
                 } else {
                     $.each(products, function(i, product) {
                         const img_path = 'storage/product/' + product.img_path;
-                        const tr = '<tr>' + 
+                        const tr = '<tr id="product_' + product.id + '">' + 
                                     '<td>' + product.id + '</td>' +
                                     '<td><img src="' + img_path + '" class="img-thumbnail" alt="..."></td>' +
                                     '<td>' + product.product_name + '</td>' +
@@ -33,7 +33,7 @@ $(document).ready(function() {
                                     '<td><form id="delete_' + product.id + '" method="post" action="products/' + product.id + '">' +
                                         '<input type="hidden" name="_token" value="' + csrfToken + '">' +
                                         '<input type="hidden" name="_method" value="delete">' +
-                                        '<a class="btn btn-danger" href="#" data-id="' + product.id + '" onclick="deletePost(this)">削除</a>' +
+                                        '<a class="btn btn-danger delete-btn" href="#" data-id="' + product.id + '">削除</a>' +
                                     '</form></td>' +
                                  '</tr>';
                         tbody.append(tr);

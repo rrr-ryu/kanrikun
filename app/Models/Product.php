@@ -118,6 +118,17 @@ class Product extends Model
         return $product;
     }
 
+    public function saleProduct($quantity)
+    {
+        // 在庫数から購入数を減算する
+        $stock = $this->stock;
+        $stock -= $quantity;
+
+        $this->stock = $stock;
+        $this->save();
+
+    }
+
     public function company()
     {
         return $this->belongsTo(Company::class);

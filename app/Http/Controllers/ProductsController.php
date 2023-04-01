@@ -138,4 +138,6 @@ class ProductsController extends Controller
         $sortProducts = $products->sortBy($sort_key)->values()->all();
         return $sortProducts;
     }
+
+
 }

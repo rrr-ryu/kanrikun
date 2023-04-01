@@ -18,8 +18,8 @@ class CreateProductsTable extends Migration
             $table->unsignedBigInteger('company_id');
             $table->foreign('company_id')->references('id')->on('companies');
             $table->string('product_name');
-            $table->integer('price');
-            $table->integer('stock');
+            $table->unsignedInteger('price');
+            $table->unsignedInteger('stock');
             $table->string('comment')->nullable();
             $table->string('img_path')->nullable();
             $table->timestamps();

@@ -16,6 +16,6 @@ $(document).on('click', '.delete-btn', function(e) {
 
         });
         const tr = $('#product_' + id);
-        tr.hide();
+        tr.remove();
     }
 });

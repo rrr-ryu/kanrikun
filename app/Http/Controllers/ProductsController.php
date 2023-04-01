@@ -14,6 +14,10 @@ class ProductsController extends Controller
         $products = (new Product())->allProducts();
         $companies = (new Company())->allCompanies();
 
+        // セッションに配列を保存するコード
+        session_start();
+        $_SESSION['products'] = $products;
+
         return view('products.index', compact('products', 'companies'));
     }
 
@@ -73,22 +77,65 @@ class ProductsController extends Controller
         ->route('products.edit',['product' => $product->id]);
     }
 
-    public function destroy($id)
+    public function destroy(Request $request)
     {
+        $id = $request->input('_id');
         $product = (new Product())->findProduct($id)
         ->delete();
 
-        return redirect()
-        ->route('products.index');
+        // return redirect()
+        // ->route('products.index');
     }
 
     public function search()
     {
+        session_start();
+        $products = $_SESSION['products'];
+
         $search = $_POST["search"];
-        $company = $_POST["company_id"];
+        $companyId = $_POST["company_id"];
+        $minPrice = $_POST["searchPrice_min"];
+        $maxPrice = $_POST["searchPrice_max"];
+        $minStock = $_POST["searchStock_min"];
+        $maxStock = $_POST["searchStock_max"];
         
         // 表示商品の取得
-        $products = (new Product())->searchProducts($search, $company);
+        $products = (new Product())
+        ->searchProducts($minPrice, $maxPrice, $minStock, $maxStock, $search, $companyId);
+
+        // セッションに配列を保存するコード
+        $_SESSION['products'] = $products;
+
         return $products;
+    }
+
+    public function sort()
+    {
+        // セッションから配列を取得するコード
+        session_start();
+        $products = $_SESSION['products'];
+
+        $sort_id = $_POST['sort'];
+        // sort_idによって検索するキーを変える
+        switch ($sort_id) {
+            case 1:
+                $sort_key = 'id';
+                break;
+            case 2:
+                $sort_key = 'product_name';
+                break;
+            case 3:
+                $sort_key = 'price';
+                break;
+            case 4:
+                $sort_key = 'stock';
+                break;
+            case 5:
+                $sort_key = 'company_id';
+                break;
+        }
+        // 検索して配列を新しく作成して代入する
+        $sortProducts = $products->sortBy($sort_key)->values()->all();
+        return $sortProducts;
     }
 }

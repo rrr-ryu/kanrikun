@@ -2,6 +2,7 @@ $(document).ready(function() {
     const searchForm = $('#searchForm');
     const noResultMsg = $('<p>検索結果が見つかりませんでした</p>');
     const csrfToken = $('meta[name="csrf-token"]').attr('content');
+    const sortFirst = $('#sort_first');
     searchForm.on('submit', function(e) {
         e.preventDefault();
         // すでに表示されているメッセージを削除
@@ -21,7 +22,7 @@ $(document).ready(function() {
                 } else {
                     $.each(products, function(i, product) {
                         const img_path = 'storage/product/' + product.img_path;
-                        const tr = '<tr>' + 
+                        const tr = '<tr id="product_' + product.id + '">' + 
                                     '<td>' + product.id + '</td>' +
                                     '<td><img src="' + img_path + '" class="img-thumbnail" alt="..."></td>' +
                                     '<td>' + product.product_name + '</td>' +
@@ -32,13 +33,17 @@ $(document).ready(function() {
                                     '<td><form id="delete_' + product.id + '" method="post" action="products/' + product.id + '">' +
                                         '<input type="hidden" name="_token" value="' + csrfToken + '">' +
                                         '<input type="hidden" name="_method" value="delete">' +
-                                        '<a class="btn btn-danger" href="#" data-id="' + product.id + '" onclick="deletePost(this)">削除</a>' +
+                                        '<a class="btn btn-danger delete-btn" href="#" data-id="' + product.id + '">削除</a>' +
                                     '</form></td>' +
                                  '</tr>';
                         tbody.append(tr);
                     });
                 }
+                // 検索した時にソートをIDに戻す
+                sortFirst.prop("selected", true);
             }
         });
+        // 検索後入力した内容を消す
+        searchForm.find(':text').val("");
     });
 });

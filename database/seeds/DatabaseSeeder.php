@@ -15,8 +15,9 @@ class DatabaseSeeder extends Seeder
             [
                 UserSeeder::class,
                 CompanySeeder::class,
-                ProductSeeder::class,
+                // ProductSeeder::class,
             ]
         );
+        factory(App\Models\Product::class, 20)->create();
     }
 }
